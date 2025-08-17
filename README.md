@@ -30,6 +30,7 @@ Ringkasan Hasil: Skor akhir dengan pesan personalisasi berdasarkan performa
 
 Demo Langsung
 Aplikasi ini telah di-deploy di Netlify dan dapat diakses di:
+
 https://musical-panda-7c5611.netlify.app/
 
 Penjelasan Dukungan AI
@@ -72,6 +73,7 @@ Tampilan awal dengan informasi kuis
 
 Tampilan pertanyaan dengan timer dan pilihan jawaban
 <img width="1920" height="1080" alt="Cuplikan layar 2025-08-17 212941" src="https://github.com/user-attachments/assets/8bae3faa-ea26-43b6-95ab-6035bf7917e9" />
+
 <img width="1920" height="1080" alt="Cuplikan layar 2025-08-17 213017" src="https://github.com/user-attachments/assets/2a61d58d-e299-4146-8dcf-203f2f27e4d6" />
 
 Tampilan hasil akhir dengan skor dan feedback
