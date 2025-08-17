@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodePlay Arena - Interactive Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            background: rgba(15, 32, 39, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0a192f, #172a45);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(100, 255, 218, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #64ffda, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            color: #ccd6f6;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            color: #ccd6f6;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .welcome-description {
+            font-size: 1.1rem;
+            color: #a8b2d1;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.1), rgba(0, 180, 219, 0.1));
+            color: white;
+            border-radius: 15px;
+            min-width: 120px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: #ccd6f6;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 180, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 180, 219, 0.5);
+        }
+
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .start-btn:hover::before {
+            left: 100%;
+        }
+
+        .quiz-screen {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.1);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #64ffda, #00b4db);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(23, 42, 69, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: #ccd6f6;
+        }
+
+        .score {
+            font-weight: 600;
+            color: #64ffda;
+        }
+
+        .timer {
+            font-weight: 600;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ccd6f6;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .answers {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .answer-btn {
+            padding: 1rem 1.5rem;
+            background: rgba(23, 42, 69, 0.7);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            color: #ccd6f6;
+        }
+
+        .answer-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 180, 219, 0.2);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.8), rgba(0, 184, 148, 0.8));
+            color: white;
+            border-color: #00b894;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.8), rgba(255, 107, 107, 0.8));
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+        .answer-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 180, 219, 0.4);
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #64ffda, #00b4db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .score-message {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            margin-bottom: 2rem;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
+        }
+
+        .restart-btn:nth-child(3) {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+        }
+
+        .restart-btn:nth-child(3):hover {
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(23, 42, 69, 0.3);
+            border-top: 3px solid #64ffda;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .question {
+                font-size: 1.2rem;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sisanya sama seperti sebelumnya -->
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎮 CodePlay Arena</div>
+            <div class="subtitle">Interactive Quiz Challenge</div>
+            <div class="subtitle">By : Muh. Aksa</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <h2 class="welcome-title">Selamat Datang di CodePlay Arena!</h2>
+                <p class="welcome-description">
+                    Uji pengetahuan Anda dalam berbagai topik menarik. Setiap pertanyaan memiliki batas waktu,
+                    jadi pikirkan dengan cepat dan tepat untuk mendapatkan skor terbaik!
+                </p>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">Pertanyaan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30</div>
+                        <div class="stat-label">Detik/Soal</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100</div>
+                        <div class="stat-label">Poin Max</div>
+                    </div>
+                </div>
+
+                <button class="start-btn" onclick="startQuiz()">🚀 Mulai Kuis</button>
+            </div>
+
+            <!-- Loading Screen -->
+            <div class="loading" id="loadingScreen">
+                <div class="spinner"></div>
+                <p>Memuat pertanyaan...</p>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div class="quiz-screen" id="quizScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="quiz-header">
+                    <div class="question-counter">
+                        Pertanyaan <span id="currentQuestion">1</span> dari <span id="totalQuestions">10</span>
+                    </div>
+                    <div class="score">Skor: <span id="currentScore">0</span></div>
+                    <div class="timer">⏰ <span id="timeLeft">30</span></div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question" id="questionText">Loading...</div>
+                    <div class="answers" id="answersContainer">
+                        <!-- Answers will be populated by JavaScript -->
+                    </div>
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Pertanyaan Selanjutnya</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <h2 class="results-title">🎉 Kuis Selesai!</h2>
+                <div class="final-score" id="finalScore">0/100</div>
+                <div class="score-message" id="scoreMessage">Bagus sekali!</div>
+                
+                <button class="restart-btn" onclick="restartQuiz()">🔄 Main Lagi</button>
+                <button class="restart-btn" onclick="showWelcome()">🏠 Kembali ke Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data - Dalam implementasi nyata, ini akan diambil dari database PHP
+        const quizData = [
+            {
+                question: "Apa singkatan dari HTML?",
+                answers: [
+                    "HyperText Markup Language",
+                    "High Technology Modern Language",
+                    "Home Tool Markup Language",
+                    "Hyperlink and Text Markup Language"
+                ],
+                correct: 0
+            },
+            {
+                question: "Bahasa pemrograman mana yang digunakan untuk styling web?",
+                answers: ["JavaScript", "Python", "CSS", "Java"],
+                correct: 2
+            },
+            {
+                question: "Apa kepanjangan dari CPU?",
+                answers: [
+                    "Central Processing Unit",
+                    "Computer Personal Unit",
+                    "Central Program Unit",
+                    "Computer Processing Unit"
+                ],
+                correct: 0
+            },
+            {
+                question: "Protokol yang digunakan untuk transfer data web adalah:",
+                answers: ["FTP", "HTTP", "SMTP", "TCP"],
+                correct: 1
+            },
+            {
+                question: "Database yang menggunakan SQL adalah jenis database:",
+                answers: ["NoSQL", "Relational", "Document", "Graph"],
+                correct: 1
+            },
+            {
+                question: "Framework JavaScript yang populer untuk membuat UI adalah:",
+                answers: ["Django", "Laravel", "React", "Spring"],
+                correct: 2
+            },
+            {
+                question: "Port default untuk HTTP adalah:",
+                answers: ["443", "80", "21", "22"],
+                correct: 1
+            },
+            {
+                question: "Apa yang dimaksud dengan responsive design?",
+                answers: [
+                    "Design yang cepat loading",
+                    "Design yang menyesuaikan berbagai ukuran layar",
+                    "Design dengan animasi",
+                    "Design dengan warna menarik"
+                ],
+                correct: 1
+            },
+            {
+                question: "Method HTTP untuk mengirim data adalah:",
+                answers: ["GET", "POST", "PUT", "DELETE"],
+                correct: 1
+            },
+            {
+                question: "Ekstensi file untuk JavaScript adalah:",
+                answers: [".java", ".js", ".json", ".jsx"],
+                correct: 1
+            }
+        ];
+
+        // Quiz State
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer = null;
+        let selectedAnswer = null;
+
+        // DOM Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const questionText = document.getElementById('questionText');
+        const answersContainer = document.getElementById('answersContainer');
+        const currentQuestionSpan = document.getElementById('currentQuestion');
+        const totalQuestionsSpan = document.getElementById('totalQuestions');
+        const currentScoreSpan = document.getElementById('currentScore');
+        const timeLeftSpan = document.getElementById('timeLeft');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressFill = document.getElementById('progressFill');
+        const finalScore = document.getElementById('finalScore');
+        const scoreMessage = document.getElementById('scoreMessage');
+
+        // Initialize
+        totalQuestionsSpan.textContent = quizData.length;
+
+        function startQuiz() {
+            welcomeScreen.style.display = 'none';
+            loadingScreen.style.display = 'block';
+            
+            // Simulate loading time
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                quizScreen.style.display = 'block';
+                resetQuiz();
+                loadQuestion();
+                startTimer();
+            }, 1500);
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            updateScore();
+            updateProgress();
+        }
+
+        function loadQuestion() {
+            const question = quizData[currentQuestionIndex];
+            questionText.textContent = question.question;
+            currentQuestionSpan.textContent = currentQuestionIndex + 1;
+            
+            // Clear previous answers
+            answersContainer.innerHTML = '';
+            nextBtn.style.display = 'none';
+            selectedAnswer = null;
+            
+            // Create answer buttons
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(index, button);
+                answersContainer.appendChild(button);
+            });
+
+            // Reset timer
+            timeLeft = 30;
+            updateTimer();
+        }
+
+        function selectAnswer(answerIndex, buttonElement) {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = answerIndex;
+            const question = quizData[currentQuestionIndex];
+            const isCorrect = answerIndex === question.correct;
+            
+            // Disable all buttons
+            const allButtons = document.querySelectorAll('.answer-btn');
+            allButtons.forEach(btn => btn.classList.add('disabled'));
+            
+            // Show correct/incorrect
+            if (isCorrect) {
+                buttonElement.classList.add('correct');
+                score += Math.ceil((timeLeft / 30) * 10); // Score based on time left
+            } else {
+                buttonElement.classList.add('incorrect');
+                allButtons[question.correct].classList.add('correct');
+            }
+            
+            updateScore();
+            clearInterval(timer);
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            updateProgress();
+            
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+                startTimer();
+            } else {
+                showResults();
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    // Auto select wrong answer if time runs out
+                    if (selectedAnswer === null) {
+                        const allButtons = document.querySelectorAll('.answer-btn');
+                        allButtons.forEach(btn => btn.classList.add('disabled'));
+                        allButtons[quizData[currentQuestionIndex].correct].classList.add('correct');
+                        nextBtn.style.display = 'block';
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            timeLeftSpan.textContent = timeLeft;
+            if (timeLeft <= 10) {
+                timeLeftSpan.parentElement.style.color = '#ff6b6b';
+            } else {
+                timeLeftSpan.parentElement.style.color = '#64ffda';
+            }
+        }
+
+        function updateScore() {
+            currentScoreSpan.textContent = score;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / quizData.length) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            
+            const maxScore = quizData.length * 10;
+            const percentage = Math.round((score / maxScore) * 100);
+            
+            finalScore.textContent = `${score}/${maxScore}`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🏆 Luar biasa! Anda adalah master!';
+            } else if (percentage >= 80) {
+                message = '🌟 Sangat bagus! Terus pertahankan!';
+            } else if (percentage >= 70) {
+                message = '👍 Bagus! Masih bisa ditingkatkan!';
+            } else if (percentage >= 60) {
+                message = '😊 Tidak buruk, terus berlatih!';
+            } else {
+                message = '💪 Jangan menyerah, coba lagi!';
+            }
+            
+            scoreMessage.textContent = message;
+        }
+
+        function restartQuiz() {
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            resetQuiz();
+            loadQuestion();
+            startTimer();
+        }
+
+        function showWelcome() {
+            resultsScreen.style.display = 'none';
+            welcomeScreen.style.display = 'block';
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (quizScreen.style.display === 'block' && selectedAnswer === null) {
+                if (e.key >= '1' && e.key <= '4') {
+                    const answerIndex = parseInt(e.key) - 1;
+                    const buttons = document.querySelectorAll('.answer-btn');
+                    if (buttons[answerIndex]) {
+                        selectAnswer(answerIndex, buttons[answerIndex]);
+                    }
+                }
+            }
+        });
+
+        // Prevent cheating by disabling right-click and certain key combinations
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
