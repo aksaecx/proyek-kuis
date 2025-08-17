@@ -4,7 +4,7 @@ CodePlay Arena - Kuis Interaktif
 Deskripsi
 CodePlay Arena adalah aplikasi kuis interaktif yang menguji pengetahuan pengguna tentang berbagai topik teknologi. Aplikasi berbasis web ini menampilkan fitur pertanyaan berbatas waktu, perhitungan skor berdasarkan kecepatan menjawab, dan antarmuka yang elegan dan modern. Proyek ini dikembangkan untuk mendemonstrasikan bagaimana AI dapat membantu dalam proses pengembangan perangkat lunak.
 
-Teknologi yang Digunakan
+Teknologi yang Digunakan:
 
 Frontend: HTML5, CSS3, JavaScript
 
@@ -14,7 +14,7 @@ Deployment: Netlify (Hosting Situs Statis)
 
 Alat Pengembangan: Visual Studio Code, Git
 
-Fitur Utama
+Fitur Utama:
 
 Pertanyaan Berbatas Waktu: Setiap pertanyaan memiliki waktu 30 detik
 
@@ -28,10 +28,11 @@ Feedback Instan: Jawaban ditandai hijau (benar) atau merah (salah)
 
 Ringkasan Hasil: Skor akhir dengan pesan personalisasi berdasarkan performa
 
-Demo Langsung
+
 Aplikasi ini telah di-deploy di Netlify dan dapat diakses di:
 
 https://musical-panda-7c5611.netlify.app/
+
 
 Penjelasan Dukungan AI
 IBM Granite AI digunakan dalam beberapa aspek pengembangan:
@@ -61,10 +62,18 @@ Menulis komentar kode yang jelas
 Merumuskan dokumentasi fitur
 
 Dampak Penggunaan AI:
-Percepatan Pengembangan: Waktu pengembangan berkurang hingga 40% berkat bantuan AI
-Peningkatan Kualitas: AI membantu mengidentifikasi potensi bug sejak dini
-Inspirasi Fitur: Beberapa fitur seperti sistem skor dinamis terinspirasi dari saran AI
-Konsistensi Kode: AI membantu menjaga konsistensi gaya penulisan kode
+
+Percepatan Pengembangan:
+Waktu pengembangan berkurang hingga 40% berkat bantuan AI
+
+Peningkatan Kualitas:
+AI membantu mengidentifikasi potensi bug sejak dini
+
+Inspirasi Fitur:
+Beberapa fitur seperti sistem skor dinamis terinspirasi dari saran AI
+
+Konsistensi Kode:
+AI membantu menjaga konsistensi gaya penulisan kode
 
 Screenshot
 
@@ -80,7 +89,7 @@ Tampilan hasil akhir dengan skor dan feedback
 <img width="1920" height="1080" alt="Cuplikan layar 2025-08-17 213030" src="https://github.com/user-attachments/assets/732e1b27-caea-409a-b6e4-3efd43f6f93b" />
 
 
-Pengembangan Selanjutnya
+Pengembangan Selanjutnya:
 Sistem autentikasi pengguna untuk menyimpan highscore
 Kategori kuis yang lebih beragam
 Tingkat kesulitan yang dapat disesuaikan
@@ -88,7 +97,7 @@ Efek suara dan animasi tambahan
 Sistem leaderboard online
 Fitur berbagi hasil ke media sosial
 
-Lisensi
+Lisensi:
 Proyek ini menggunakan lisensi MIT - lihat file LICENSE untuk detail lebih lanjut.
 
 Kontribusi terbuka untuk:
@@ -101,7 +110,7 @@ Perbaikan antarmuka pengguna
 
 Optimasi performa
 
-FAQ
+FAQ:
 
 Q: Apakah kuis ini bisa diakses offline?
 
